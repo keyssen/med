@@ -1,1 +1,28 @@
-spring.application.name=med
+server:
+  servlet:
+    context-path: /med
+  port: 8080
+
+spring:
+  application:
+    name: med
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  datasource:
+    url: jdbc:postgresql://localhost:5432/med?currentSchema=public
+    username: postgres
+    password: password
+    driverClassName: org.postgresql.Driver
+  liquibase:
+    change-log: classpath:/db/changelog/changelog.xml
+    enabled: true
+
+
+s3:
+  accessKeyId: test
+  secretAccessKey: test
+  serviceEndpoint: s3.localhost.localstack.cloud:4566
+  bucket: new-bucket-c6ff0b00
+  signingRegion: me-central-1
