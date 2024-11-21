@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="MR-1_create_image" author="author">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="image"/>
+            </not>
+        </preConditions>
+        <createTable tableName="image">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="MR-1_create_profile" author="author">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="profile"/>
+            </not>
+        </preConditions>
+        <createTable tableName="profile">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="profile_type" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="doctor_type" type="varchar(255)"/>
+            <column name="surname" type="varchar(255)"/>
+            <column name="name" type="varchar(255)"/>
+            <column name="patronymic" type="varchar(255)"/>
+            <column name="password" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="varchar(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="otp" type="int"/>
+            <column name="image_id" type="uuid"/>
+            <column name="is_active" type="boolean">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="MR-1_create_fk_profile_image" author="author">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                <![CDATA[
+                SELECT count(1)
+                FROM information_schema.table_constraints tc
+                WHERE constraint_name = 'fk_profile_image'
+                  AND table_name = 'profile';
+                ]]>
+            </sqlCheck>
+        </preConditions>
+        <addForeignKeyConstraint
+                constraintName="fk_profile_image"
+                baseTableName="profile"
+                baseColumnNames="image_id"
+                referencedTableName="image"
+                referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="MR-1_create_treatment_plan" author="author">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="treatment_plan"/>
+            </not>
+        </preConditions>
+        <createTable tableName="treatment_plan">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="diagnosis" type="varchar(2000)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="therapy_plan" type="varchar(2000)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="MR-1_create_medical_session" author="author">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="medical_session"/>
+            </not>
+        </preConditions>
+        <createTable tableName="medical_session">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="doctor_id" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+            <column name="patient_id" type="uuid"/>
+            <column name="treatment_plan_id" type="uuid"/>
+            <column name="session_start" type="timestamp with time zone">
+                <constraints nullable="false"/>
+            </column>
+            <column name="duration" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="price" type="numeric(19,2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="session_status" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="MR-1_create_fk_medical_session_doctor" author="author">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                <![CDATA[
+                SELECT count(1)
+                FROM information_schema.table_constraints tc
+                WHERE constraint_name = 'fk_medical_session_treatment_plan'
+                  AND table_name = 'medical_session';
+                ]]>
+            </sqlCheck>
+        </preConditions>
+        <addForeignKeyConstraint
+                constraintName="fk_medical_session_doctor"
+                baseTableName="medical_session"
+                baseColumnNames="doctor_id"
+                referencedTableName="profile"
+                referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="MR-1_create_fk_medical_session_treatment_plan" author="author">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                <![CDATA[
+                SELECT count(1)
+                FROM information_schema.table_constraints tc
+                WHERE constraint_name = 'fk_medical_session_treatment_plan'
+                  AND table_name = 'medical_session';
+                ]]>
+            </sqlCheck>
+        </preConditions>
+        <addForeignKeyConstraint
+                constraintName="fk_medical_session_treatment_plan"
+                baseTableName="medical_session"
+                baseColumnNames="treatment_plan_id"
+                referencedTableName="treatment_plan"
+                referencedColumnNames="id"/>
+    </changeSet>
+
+</databaseChangeLog>
