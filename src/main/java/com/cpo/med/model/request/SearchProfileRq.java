@@ -1,7 +1,7 @@
 package com.cpo.med.model.request;
 
-import com.cpo.med.model.enums.DoctorType;
-import com.cpo.med.model.enums.ProfileRole;
+import com.cpo.med.persistence.entity.enums.DoctorType;
+import com.cpo.med.persistence.entity.enums.ProfileRole;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

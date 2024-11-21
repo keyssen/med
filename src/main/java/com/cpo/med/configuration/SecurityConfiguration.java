@@ -1,7 +1,7 @@
 package com.cpo.med.configuration;
 
 import com.cpo.med.controller.UserSignUpMvcController;
-import com.cpo.med.model.enums.ProfileRole;
+import com.cpo.med.persistence.entity.enums.ProfileRole;
 import com.cpo.med.model.request.ProfileDefaultCreateRq;
 import com.cpo.med.service.ProfileService;
 import org.springframework.context.annotation.Bean;

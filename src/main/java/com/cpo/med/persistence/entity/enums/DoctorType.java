@@ -1,4 +1,4 @@
-package com.cpo.med.model.enums;
+package com.cpo.med.persistence.entity.enums;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.micrometer.common.lang.Nullable;

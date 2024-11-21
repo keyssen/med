@@ -1,7 +1,7 @@
 package com.cpo.med.persistence.repository;
 
-import com.cpo.med.model.enums.DoctorType;
-import com.cpo.med.model.enums.ProfileRole;
+import com.cpo.med.persistence.entity.enums.DoctorType;
+import com.cpo.med.persistence.entity.enums.ProfileRole;
 import com.cpo.med.model.request.SearchProfileRq;
 import com.cpo.med.persistence.entity.MedicalSessionEntity;
 import com.cpo.med.persistence.entity.ProfileEntity;

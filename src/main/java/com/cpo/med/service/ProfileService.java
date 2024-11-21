@@ -1,7 +1,7 @@
 package com.cpo.med.service;
 
 import com.cpo.med.mapper.ProfileMapper;
-import com.cpo.med.model.enums.ProfileRole;
+import com.cpo.med.persistence.entity.enums.ProfileRole;
 import com.cpo.med.model.request.ProfileDefaultCreateRq;
 import com.cpo.med.model.request.ProfileUpdateRq;
 import com.cpo.med.model.request.SearchProfileRq;

@@ -1,7 +1,7 @@
 package com.cpo.med.persistence.entity;
 
-import com.cpo.med.model.enums.DoctorType;
-import com.cpo.med.model.enums.ProfileRole;
+import com.cpo.med.persistence.entity.enums.DoctorType;
+import com.cpo.med.persistence.entity.enums.ProfileRole;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

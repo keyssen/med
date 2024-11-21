@@ -1,6 +1,6 @@
 package com.cpo.med.model.response;
 
-import com.cpo.med.model.enums.DoctorType;
+import com.cpo.med.persistence.entity.enums.DoctorType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

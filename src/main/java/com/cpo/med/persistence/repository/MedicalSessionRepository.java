@@ -1,6 +1,6 @@
 package com.cpo.med.persistence.repository;
 
-import com.cpo.med.model.enums.SessionStatus;
+import com.cpo.med.persistence.entity.enums.SessionStatus;
 import com.cpo.med.persistence.entity.MedicalSessionEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

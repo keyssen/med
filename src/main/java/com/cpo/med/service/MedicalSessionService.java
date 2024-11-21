@@ -1,7 +1,7 @@
 package com.cpo.med.service;
 
 import com.cpo.med.mapper.MedicalSessionMapper;
-import com.cpo.med.model.enums.SessionStatus;
+import com.cpo.med.persistence.entity.enums.SessionStatus;
 import com.cpo.med.model.request.MedicalSessionCreateRq;
 import com.cpo.med.model.request.MedicalSessionUpdateRq;
 import com.cpo.med.persistence.entity.MedicalSessionEntity;

@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
-import static com.cpo.med.model.enums.SessionStatus.IN_PROGRESS;
+import static com.cpo.med.persistence.entity.enums.SessionStatus.IN_PROGRESS;
 
 @Component
 @RequiredArgsConstructor
