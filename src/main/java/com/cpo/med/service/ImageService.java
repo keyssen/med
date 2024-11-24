@@ -30,6 +30,7 @@ public class ImageService {
     public ImageEntity createImage(ProfileEntity profile) {
         ImageEntity imageEntity = new ImageEntity();
         imageEntity.setProfile(profile);
+        profile.setImage(imageEntity);
         return imageRepository.save(imageEntity);
     }
 }

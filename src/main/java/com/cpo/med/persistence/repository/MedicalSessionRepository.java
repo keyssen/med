@@ -1,7 +1,7 @@
 package com.cpo.med.persistence.repository;
 
-import com.cpo.med.model.enums.SessionStatus;
 import com.cpo.med.persistence.entity.MedicalSessionEntity;
+import com.cpo.med.persistence.entity.enums.SessionStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -18,4 +18,8 @@ public interface MedicalSessionRepository extends JpaRepository<MedicalSessionEn
             AND mse.sessionStatus IN :sessionStatuses
             """)
     List<MedicalSessionEntity> findByDoctorIds(List<UUID> doctorIds, List<SessionStatus> sessionStatuses);
+
+    List<MedicalSessionEntity> findByDoctorId(UUID doctorId);
+
+    List<MedicalSessionEntity> findByPatientId(UUID patientId);
 }

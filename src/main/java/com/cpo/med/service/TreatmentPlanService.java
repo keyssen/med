@@ -1,7 +1,6 @@
 package com.cpo.med.service;
 
 import com.cpo.med.mapper.TreatmentPlanMapper;
-import com.cpo.med.model.request.TreatmentPlanCreateRq;
 import com.cpo.med.model.request.TreatmentPlanUpdateRq;
 import com.cpo.med.model.response.TreatmentPlanRs;
 import com.cpo.med.persistence.entity.MedicalSessionEntity;
@@ -13,7 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
-import static com.cpo.med.model.enums.SessionStatus.IN_PROGRESS;
+import static com.cpo.med.persistence.entity.enums.SessionStatus.IN_PROGRESS;
+import static java.util.Objects.isNull;
 
 @Component
 @RequiredArgsConstructor
@@ -32,8 +32,7 @@ public class TreatmentPlanService {
     }
 
     @Transactional
-    public UUID create(TreatmentPlanCreateRq createRq, UUID medicalSessionId) {
-        MedicalSessionEntity medicalSession = medicalSessionService.getById(medicalSessionId);
+    public UUID create(TreatmentPlanUpdateRq createRq, MedicalSessionEntity medicalSession) {
         if (medicalSession.getSessionStatus().equals(IN_PROGRESS)) {
             return treatmentPlanRepository.save(TreatmentPlanMapper.toEntity(createRq, medicalSession)).getId();
         }
@@ -41,11 +40,12 @@ public class TreatmentPlanService {
     }
 
     @Transactional
-    public UUID update(TreatmentPlanUpdateRq updateRq, UUID treatmentPlanId) {
-        TreatmentPlanEntity treatmentPlan = getById(treatmentPlanId);
-        if (treatmentPlan.getMedicalSessionEntity().getSessionStatus().equals(IN_PROGRESS)) {
-            return treatmentPlanRepository.save(TreatmentPlanMapper.update(updateRq, treatmentPlan)).getId();
+    public UUID update(TreatmentPlanUpdateRq updateRq) {
+        MedicalSessionEntity medicalSession = medicalSessionService.getById(updateRq.getMedicalSessionId());
+        if (isNull(medicalSession.getTreatmentPlan())) {
+            return create(updateRq, medicalSession);
+        } else {
+            return treatmentPlanRepository.save(TreatmentPlanMapper.update(updateRq, medicalSession.getTreatmentPlan())).getId();
         }
-        throw new RuntimeException();
     }
 }

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{default}">
+
+<body>
+<div class="container" layout:fragment="content">
+    <div class="navbar-header">
+        <h1>Произведен вход</h1>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                    <h4> Привет, <span th:text="*{userDetails}"></span></h4></div>
+            </div>
+        </div>
+    </div>
+</div>
+<th:block layout:fragment="scripts">
+</th:block>
+</body>
+</html>

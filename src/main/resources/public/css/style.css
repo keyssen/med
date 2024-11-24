@@ -1,0 +1,44 @@
+html,
+body {
+}
+
+.pagination {
+    display: flex;
+    align-items: center;
+}
+
+.pagination__item {
+    display: flex;
+    border: 1px solid #000000;
+    height: 50px;
+    width: 50px;
+    align-items: center;
+    justify-content: center;
+    color: #000000;
+    text-decoration: none
+}
+
+.pagination__item-active {
+    background: black;
+    color: white;
+}
+
+.pagination__item-active:hover {
+    color: white;
+}
+
+.pass_image {
+    width: 200px;
+    height: 150px;
+    object-fit: fill;
+}
+
+.pass__list_pass_buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.createOrderModal {
+
+}

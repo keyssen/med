@@ -1,16 +1,16 @@
-package com.cpo.med.model.enums;
+package com.cpo.med.persistence.entity.enums;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.micrometer.common.lang.Nullable;
 
 public enum SessionStatus {
-    CREATED("CREATED"),
-    PATIENT_REGISTERED("PATIENT_REGISTERED"),
-    PATIENT_DECLINED("PATIENT_DECLINED"),
-    DECLINED("DECLINED"),
-    IN_PROGRESS("IN_PROGRESS"),
-    AWAITING_PAYMENT("AWAITING_PAYMENT"),
-    PAID("PAID");
+    CREATED("Создано"),
+    PATIENT_REGISTERED("Пациент зарегистрирован"),
+    PATIENT_DECLINED("Пациент отказался"),
+    DECLINED("Отказано пациенту"),
+    IN_PROGRESS("В процессе"),
+    AWAITING_PAYMENT("Ожидание оплаты"),
+    PAID("Оплачено");
 
     private final String string;
 

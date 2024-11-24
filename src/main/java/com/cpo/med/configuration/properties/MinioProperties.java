@@ -6,13 +6,12 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ConfigurationProperties(prefix = "s3")
+@ConfigurationProperties(prefix = "minio")
 @Getter
 @Setter
-public class S3Properties {
-    private String accessKeyId;
-    private String secretAccessKey;
-    private String serviceEndpoint;
-    private String signingRegion;
-    private String bucket;
+public class MinioProperties {
+    private String endpoint;
+    private String accessKey;
+    private String secretKey;
+    private String bucketName;
 }

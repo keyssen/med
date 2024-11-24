@@ -1,6 +1,6 @@
-package com.cpo.med.controller;
+package com.cpo.med.controller.mvc.auth;
 
-import com.cpo.med.model.request.ProfileDefaultCreateRq;
+import com.cpo.med.model.request.ProfileSignUpRq;
 import com.cpo.med.persistence.entity.ProfileEntity;
 import com.cpo.med.service.ProfileService;
 import jakarta.validation.Valid;
@@ -15,22 +15,23 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import static com.cpo.med.utils.Constants.SIGNUP_URL;
+
 @Controller
-@RequestMapping(UserSignUpMvcController.SIGNUP_URL)
+@RequestMapping(SIGNUP_URL)
 @RequiredArgsConstructor
 @Slf4j
-public class UserSignUpMvcController {
-    public static final String SIGNUP_URL = "/signup";
+public class SignUpController {
     private final ProfileService profileService;
 
     @GetMapping
     public String showSignupForm(Model model) {
-        model.addAttribute("userDto", new ProfileDefaultCreateRq());
+        model.addAttribute("profileSignUpRq", new ProfileSignUpRq());
         return "signup";
     }
 
     @PostMapping
-    public String signup(@ModelAttribute("userDto") @Valid ProfileDefaultCreateRq profileDefaultCreateRq,
+    public String signup(@ModelAttribute("userDto") @Valid ProfileSignUpRq profileSignUpRq,
                          BindingResult bindingResult,
                          Model model) {
         if (bindingResult.hasErrors()) {
@@ -38,7 +39,7 @@ public class UserSignUpMvcController {
             return "signup";
         }
         try {
-            final ProfileEntity profileEntity = profileService.defaultRegistration(profileDefaultCreateRq);
+            ProfileEntity profileEntity = profileService.signUp(profileSignUpRq);
             return "redirect:/email?created=" + profileEntity.getEmail();
         } catch (ValidationException e) {
             model.addAttribute("errors", e.getMessage());

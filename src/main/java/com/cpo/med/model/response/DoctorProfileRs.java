@@ -1,6 +1,6 @@
 package com.cpo.med.model.response;
 
-import com.cpo.med.model.enums.DoctorType;
+import com.cpo.med.persistence.entity.enums.DoctorType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -15,10 +15,8 @@ import java.util.UUID;
 public class DoctorProfileRs {
     private UUID id;
     private DoctorType doctorType;
-    private String surname;
-    private String name;
-    private String patronymic;
+    private String fullName;
     @EqualsAndHashCode.Exclude
-    private List<MedicalSessionAvailableRs> patientSessions;
+    private List<MedicalSessionAvailableRs> medicalSessions;
     private String imageUrl;
 }

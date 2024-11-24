@@ -19,9 +19,13 @@
         <liquibase.version>4.30.0</liquibase.version>
         <lombok.version>1.18.36</lombok.version>
         <postgresql.version>42.7.4</postgresql.version>
-        <amazonaws.version>1.12.778</amazonaws.version>
+        <minio.version>8.5.13</minio.version>
         <testcontainers.version>1.20.3</testcontainers.version>
         <guava.version>33.3.1-jre</guava.version>
+        <zxing.version>3.5.3</zxing.version>
+        <font-awesome.version>6.1.0</font-awesome.version>
+        <jquery.version>3.6.0</jquery.version>
+        <bootstrap.version>5.1.3</bootstrap.version>
     </properties>
 
     <dependencies>
@@ -72,22 +76,22 @@
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>bootstrap</artifactId>
-            <version>5.1.3</version>
+            <version>${bootstrap.version}</version>
         </dependency>
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>jquery</artifactId>
-            <version>3.6.0</version>
+            <version>${jquery.version}</version>
         </dependency>
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>font-awesome</artifactId>
-            <version>6.1.0</version>
+            <version>${font-awesome.version}</version>
         </dependency>
         <dependency>
             <groupId>com.google.zxing</groupId>
             <artifactId>javase</artifactId>
-            <version>3.5.2</version>
+            <version>${zxing.version}</version>
         </dependency>
         <dependency>
             <groupId>org.postgresql</groupId>
@@ -107,9 +111,9 @@
             <optional>true</optional>
         </dependency>
         <dependency>
-            <groupId>com.amazonaws</groupId>
-            <artifactId>aws-java-sdk-s3</artifactId>
-            <version>${amazonaws.version}</version>
+            <groupId>io.minio</groupId>
+            <artifactId>minio</artifactId>
+            <version>${minio.version}</version>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>

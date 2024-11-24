@@ -1,8 +1,7 @@
 package com.cpo.med.configuration;
 
-import com.cpo.med.controller.UserSignUpMvcController;
-import com.cpo.med.model.enums.ProfileRole;
 import com.cpo.med.model.request.ProfileDefaultCreateRq;
+import com.cpo.med.persistence.entity.enums.ProfileRole;
 import com.cpo.med.service.ProfileService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,11 +17,13 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import static com.cpo.med.utils.Constants.LOGIN_URL;
+import static com.cpo.med.utils.Constants.SIGNUP_URL;
+
 @Configuration
 @EnableGlobalMethodSecurity(securedEnabled = true)
 @EnableWebSecurity
 public class SecurityConfiguration {
-    private static final String LOGIN_URL = "/login";
     private final ProfileService profileService;
     private final AuthenticationSuccessHandler successHandler;
     private final PasswordEncoderConfiguration passwordEncoderConfiguration;
@@ -39,7 +40,6 @@ public class SecurityConfiguration {
             ProfileDefaultCreateRq profileDefaultCreateRq = new ProfileDefaultCreateRq(
                     "adminPassword",
                     "nonomusay@gmail.com",
-                    123123,
                     false
             );
             profileService.create(profileDefaultCreateRq, ProfileRole.ADMINISTRATOR);
@@ -51,7 +51,7 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers(UserSignUpMvcController.SIGNUP_URL).permitAll()
+                        .requestMatchers(SIGNUP_URL).permitAll()
                         .requestMatchers(HttpMethod.GET, LOGIN_URL).permitAll()
                         .anyRequest().authenticated()
                 )

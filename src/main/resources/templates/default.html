@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+
+<html lang="ru"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <meta charset="UTF-8">
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <title>Коммунальная управляющая компания</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="icon" href="/favicon.svg">
+    <script type="text/javascript" src="/webjars/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <script src="https://cdn.anychart.com/releases/8.12.1/js/anychart-core.min.js"></script>
+    <script src="https://cdn.anychart.com/releases/8.12.1/js/anychart-cartesian.min.js"></script>
+    <link rel="stylesheet" href="/webjars/bootstrap/5.1.3/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/webjars/font-awesome/6.1.0/css/all.min.css"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.18/dist/css/bootstrap-select.min.css"
+          rel="stylesheet">
+
+    <link rel="stylesheet" href="/css/style.css"/>
+    <script>
+        const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+
+        // function request() {
+        //     console.log('Requesting')
+        //     $.ajax({
+        //         url: `/api/notification/list`,
+        //         type: 'GET',
+        //         headers: {
+        //             'X-CSRF-Token': csrfToken,
+        //         },
+        //         success: function (notifications) {
+        //             if (notifications) {
+        //                 $(`#notification`).addClass('notification-active');
+        //                 $('a[href="/mvc/notification/list"]').addClass('notification');
+        //             } else {
+        //                 $(`#notification`).removeClass('notification-active');
+        //                 $('a[href="/mvc/notification/list"]').removeClass('notification');
+        //             }
+        //         },
+        //     });
+        // }
+        //
+        // setInterval(request, 5000);
+        // request();
+    </script>
+    <style>
+        .body {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: 5px 10% 20px 10%;
+        }
+
+        .notification {
+            position: relative;
+        }
+
+        .notification-active {
+            position: absolute;
+            content: '';
+            top: 0;
+            right: 0;
+            width: 10px;
+            height: 10px;
+            background-color: red;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body class="d-flex flex-column h-100">
+<header class="">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <i class="fa-solid fa-font-awesome"></i>
+            </a>
+            <button class="navbar-toggler" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse menu" id="navbarNav">
+                <ul class="navbar-nav" sec:authorize="!isAuthenticated()" th:if="${active == null || !active}">
+                    <a class="nav-link" href="/login">Вход</a>
+                </ul>
+                <ul class="navbar-nav" sec:authorize="isAuthenticated()" th:if="${active}">
+                    <a class="nav-link" href="/">Главная</a>
+                    <a class="nav-link" href="/profile/edit">Профиль</a>
+                    <a class="nav-link" href="/doctors">Врачи</a>
+                    <a class="nav-link" href="/session/doctor" th:if="${userRole == 'DOCTOR'}">Сессии</a>
+                    <a class="nav-link" href="/session/admin" th:if="${userRole == 'ADMINISTRATOR'}">Сессии</a>
+                    <a class="nav-link" href="/session/patient" th:if="${userRole == 'PATIENT'}">Сессии</a>
+                    <a class="nav-link" href="/logout">Выход</a>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+<div layout:fragment="content" class="body">
+    <a class="nav-link" href="/dashboard">Dashboard</a>
+</div>
+</body>
+<th:block layout:fragment="scripts">
+</th:block>
+</html>

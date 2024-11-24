@@ -1,6 +1,6 @@
 package com.cpo.med.persistence.entity;
 
-import com.cpo.med.model.enums.SessionStatus;
+import com.cpo.med.persistence.entity.enums.SessionStatus;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

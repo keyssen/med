@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{default}">
+
+<head>
+</head>
+
+<body>
+<div layout:fragment="content">
+    <div class="container my-5">
+        <h1 class="text-center">Детали медицинской сессии</h1>
+
+        <div class="card my-4">
+            <div class="card-header">
+                <h2>Сессия: <span th:text="${medicalSession.sessionStatus}"></span></h2>
+            </div>
+            <div class="card-body">
+                <!-- Доктор -->
+                <p><strong>Доктор:</strong> <span th:text="${medicalSession.doctorFullName}"></span></p>
+                <img th:src="${medicalSession.doctorImageUrl}" alt="Фото доктора" class="img-thumbnail"
+                     th:if="${medicalSession.doctorImageUrl != null}">
+                <img th:src="@{/avatar.jpg}" alt="Фото доктора" class="img-thumbnail"
+                     th:if="${medicalSession.doctorImageUrl == null}">
+
+                <!-- Пациент -->
+                <p><strong>Пациент:</strong> <span th:text="${medicalSession.patientFullName}"></span></p>
+                <img th:src="${medicalSession.patientImageUrl}" alt="Фото пациента" class="img-thumbnail"
+                     th:if="${medicalSession.patientImageUrl != null}">
+                <img th:src="@{/avatar.jpg}" alt="Фото пациента" class="img-thumbnail"
+                     th:if="${medicalSession.patientImageUrl == null}">
+
+                <!-- Время начала -->
+                <p><strong>Начало сессии:</strong> <span
+                        th:text="${#temporals.format(medicalSession.sessionStart, 'yyyy-MM-dd HH:mm')}"></span></p>
+
+                <!-- Длительность -->
+                <p><strong>Длительность:</strong> <span th:text="${medicalSession.duration}"></span> минут</p>
+
+                <!-- Цена -->
+                <p><strong>Цена:</strong> <span th:text="${medicalSession.price}"></span> руб.</p>
+
+
+                <input type="hidden" id="medicalSessionId" name="medicalSessionId" th:value="${medicalSession.id}">
+
+                <!-- Диагноз -->
+                <div>
+                    <label for="diagnosis"><strong>Диагноз:</strong></label>
+                    <textarea id="diagnosis" name="diagnosis" class="form-control" rows="4" maxlength="2000"
+                              th:readonly="${medicalSession.sessionStatus.name() != 'IN_PROGRESS'}"
+                              th:text="${medicalSession.diagnosis}"></textarea>
+                </div>
+
+                <!-- План терапии -->
+                <div class="mt-3">
+                    <label for="therapyPlan"><strong>План терапии:</strong></label>
+                    <textarea id="therapyPlan" name="therapyPlan" class="form-control" rows="6" maxlength="2000"
+                              th:readonly="${medicalSession.sessionStatus.name() != 'IN_PROGRESS'}"
+                              th:text="${medicalSession.therapyPlan}"></textarea>
+                </div>
+
+                <!-- Кнопка сохранения -->
+                <div class="mt-4" th:if="${medicalSession.sessionStatus.name() == 'IN_PROGRESS'}">
+                    <button type="submit" class="btn btn-primary" th:attr="onclick=|javascript:updateTreatmentPlan()|">
+                        Сохранить изменения
+                    </button>
+                </div>
+
+
+                <button th:if="${medicalSession.sessionStatus.name() == 'IN_PROGRESS' && userRole == 'DOCTOR'}"
+                        type="button"
+                        class="btn btn-danger" th:attr="onclick=|javascript:changeStatus('AWAITING_PAYMENT')|">
+                    Закончить сессию
+                </button>
+                <button th:if="${medicalSession.sessionStatus.name() == 'AWAITING_PAYMENT' && userRole == 'ADMINISTRATOR'}"
+                        type="button"
+                        class="btn btn-danger" th:attr="onclick=|javascript:changeStatus('PAID')|">
+                    Оплачено
+                </button>
+                <button th:if="${medicalSession.sessionStatus.name() == 'PATIENT_REGISTERED' && (userRole == 'DOCTOR' || 'ADMINISTRATOR')}"
+                        type="button"
+                        class="btn btn-danger" th:attr="onclick=|javascript:changeStatus('DECLINED')|">
+                    Отменить сессию
+                </button>
+                <button th:if="${medicalSession.sessionStatus.name() == 'PATIENT_REGISTERED' && userRole == 'PATIENT'}"
+                        type="button"
+                        class="btn btn-danger" th:attr="onclick=|javascript:changeStatus('PATIENT_DECLINED')|">
+                    Отменить сессию
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<th:block layout:fragment="scripts">
+    <script>
+        let medicalSessionId = $('#medicalSessionId');
+        let diagnosis = $('#diagnosis');
+        let therapyPlan = $('#therapyPlan');
+
+        function updateTreatmentPlan() {
+            $.ajax({
+                url: `/api/session/treatmentPlan`,
+                type: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-Token': csrfToken,
+                },
+                data: JSON.stringify({
+                    medicalSessionId: medicalSessionId.val(),
+                    diagnosis: diagnosis.val(),
+                    therapyPlan: therapyPlan.val(),
+                }),
+                success: function () {
+                    location.reload();
+                },
+            });
+        }
+
+        function changeStatus(status) {
+            $.ajax({
+                url: `/api/session/status`,
+                type: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-Token': csrfToken,
+                },
+                data: JSON.stringify({
+                    id: medicalSessionId.val(),
+                    status: status
+                }),
+                success: function () {
+                    location.reload();
+                },
+            });
+        }
+    </script>
+</th:block>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{default}">
+<body>
+<div layout:fragment="content">
+    <div th:if="${errors}" th:text="${errors}" class="margin-bottom alert alert-danger"></div>
+    <form action="#" th:action="@{/signup}" th:object="${profileSignUpRq}" method="post" enctype="multipart/form-data">
+        <div class="mb-3">
+            <input type="text" class="form-control" th:field="${profileSignUpRq.email}"
+                   placeholder="Почта" required="true" autofocus="true" minlength="7" maxlength="64"/>
+        </div>
+        <div class="mb-3">
+            <input type="text" class="form-control" th:field="${profileSignUpRq.name}"
+                   placeholder="Имя" required="true" minlength="1" maxlength="64"/>
+        </div>
+        <div class="mb-3">
+            <input type="text" class="form-control" th:field="${profileSignUpRq.surname}"
+                   placeholder="Фамилия" required="true" minlength="1" maxlength="64"/>
+        </div>
+        <div class="mb-3">
+            <input type="text" class="form-control" th:field="${profileSignUpRq.patronymic}"
+                   placeholder="Отчество" required="true" minlength="1" maxlength="64"/>
+        </div>
+        <div class="mb-3">
+            <input type="text" class="form-control" th:field="${profileSignUpRq.phone}"
+                   placeholder="Номер телефона" required="true" minlength="1" maxlength="16"/>
+        </div>
+        <div class="mb-3">
+            <input type="password" class="form-control" th:field="${profileSignUpRq.password}"
+                   placeholder="Пароль" required="true" minlength="1" maxlength="64"/>
+        </div>
+        <div class="mb-3">
+            <input type="password" class="form-control" th:field="${profileSignUpRq.passwordConfirm}"
+                   placeholder="Пароль (подтверждение)" required="true" minlength="1" maxlength="64"/>
+        </div>
+        <div class="mb-3">
+            <input type="file" class="form-control" th:field="${profileSignUpRq.photo}"
+                   placeholder="Аватарка"/>
+        </div>
+        <div class="mb-3">
+            <button type="submit" class="btn btn-success button-fixed">Регистрация</button>
+            <a class="btn btn-primary button-fixed" href="/oauth2/authorization/google">Регистрация через Google</a>
+            <a class="btn btn-primary button-fixed" href="/login">Вернуться ко входу</a>
+        </div>
+    </form>
+</div>
+</body>
+</html>

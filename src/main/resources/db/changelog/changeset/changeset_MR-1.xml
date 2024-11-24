@@ -43,22 +43,15 @@
             </column>
             <column name="otp" type="int"/>
             <column name="image_id" type="uuid"/>
-            <column name="is_active" type="boolean">
-                <constraints nullable="false" unique="true"/>
-            </column>
+            <column name="is_active" type="boolean"/>
         </createTable>
     </changeSet>
 
     <changeSet id="MR-1_create_fk_profile_image" author="author">
         <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">
-                <![CDATA[
-                SELECT count(1)
-                FROM information_schema.table_constraints tc
-                WHERE constraint_name = 'fk_profile_image'
-                  AND table_name = 'profile';
-                ]]>
-            </sqlCheck>
+            <not>
+                <foreignKeyConstraintExists foreignKeyTableName="profile" foreignKeyName="fk_profile_image"/>
+            </not>
         </preConditions>
         <addForeignKeyConstraint
                 constraintName="fk_profile_image"

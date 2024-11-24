@@ -1,7 +1,7 @@
 package com.cpo.med.persistence.repository;
 
-import com.cpo.med.model.enums.DoctorType;
-import com.cpo.med.model.enums.ProfileRole;
+import com.cpo.med.persistence.entity.enums.DoctorType;
+import com.cpo.med.persistence.entity.enums.ProfileRole;
 import com.cpo.med.model.request.SearchProfileRq;
 import com.cpo.med.persistence.entity.MedicalSessionEntity;
 import com.cpo.med.persistence.entity.ProfileEntity;
@@ -30,9 +30,7 @@ public class ProfileCustomRepository {
     public Page<ProfileEntity> doctorFindProfile(SearchProfileRq searchProfileRq) {
         Specification<ProfileEntity> specification = defaultFindProfile(searchProfileRq);
 
-        if (nonNull(searchProfileRq.getProfileRole())) {
-            specification.and(profileTypeFilter(ProfileRole.DOCTOR));
-        }
+        specification = specification.and(profileTypeFilter(ProfileRole.DOCTOR));
 
         PageRequest pageRequest = PageRequest.of(searchProfileRq.getPage(), searchProfileRq.getSize());
         Page<ProfileEntity> profileEntityPage = profileRepository.findAll(specification, pageRequest);
@@ -44,7 +42,7 @@ public class ProfileCustomRepository {
     public Page<ProfileEntity> adminFindProfile(SearchProfileRq searchProfileRq) {
         Specification<ProfileEntity> specification = defaultFindProfile(searchProfileRq);
         if (nonNull(searchProfileRq.getProfileRole())) {
-            specification.and(profileTypeFilter(searchProfileRq.getProfileRole()));
+            specification = specification.and(profileTypeFilter(searchProfileRq.getProfileRole()));
         }
         PageRequest pageRequest = PageRequest.of(searchProfileRq.getPage(), searchProfileRq.getSize());
 

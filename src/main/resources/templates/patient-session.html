@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{default}">
+
+<head>
+</head>
+
+<body>
+<div layout:fragment="content">
+    <div class="container my-5">
+        <h1 class="text-center mb-4">Сессии</h1>
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            <div class="col" th:each="patientSession : ${patientSessions}">
+                <div class="card h-100">
+                    <img th:src="${patientSession.doctorImageUrl}"
+                         th:if="${patientSession.doctorImageUrl != null}"
+                         class="card-img-top"
+                         alt="Изображение врача">
+                    <img th:src="@{/avatar.jpg}"
+                         th:if="${patientSession.doctorImageUrl == null}"
+                         class="card-img-top"
+                         alt="Изображение пациента">
+                    <div class="card-body">
+                        <p class="card-text">
+                            <strong>ФИО врача:</strong> <span
+                                th:text="${patientSession.doctorFullName}">ФИО врача:</span><br>
+                            <strong>Статус:</strong> <span th:text="${patientSession.sessionStatus}">Статус</span><br>
+                            <strong>Начало сессии:</strong> <span
+                                th:text="${#temporals.format(patientSession.sessionStart, 'yyyy-MM-dd HH:mm')}">Начало сессии:</span><br>
+                            <strong>Длительность:</strong> <span th:text="${patientSession.duration}">Длительность</span>
+                            минуты<br>
+                            <strong>Цена:</strong> <span th:text="${patientSession.price}">Цена</span>
+                        </p>
+                        <div>
+                            <button th:if="${patientSession.sessionStatus.name() == 'PATIENT_REGISTERED' && userRole == 'PATIENT'}"
+                                    type="button"
+                                    class="btn btn-danger" th:attr="onclick=|javascript:changeStatus('PATIENT_DECLINED','${patientSession.id}')|">
+                                Отменить сессию
+                            </button>
+                            <a th:href="@{/session/{sessionId}(sessionId=${patientSession.id})}"
+                               class="btn btn-info mt-3">
+                                Перейти к сессии
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<th:block layout:fragment="scripts">
+    <script>
+        function changeStatus(status, medicalSessionId) {
+            $.ajax({
+                url: `/api/session/status`,
+                type: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-Token': csrfToken,
+                },
+                data: JSON.stringify({
+                    id: medicalSessionId,
+                    status: status
+                }),
+                success: function () {
+                    location.reload();
+                },
+            });
+        }
+    </script>
+</th:block>
+</body>
+</html>

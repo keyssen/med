@@ -10,7 +10,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PaginationProfileDoctorRs {
+public class PaginationDoctorProfileRs {
     @EqualsAndHashCode.Exclude
     private List<DoctorProfileRs> doctors;
     private Integer page;

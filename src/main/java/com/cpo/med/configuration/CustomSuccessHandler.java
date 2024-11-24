@@ -43,6 +43,7 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
         if (profileEntity == null) {
             ProfileDefaultCreateRq defaultCreateRq = new ProfileDefaultCreateRq();
             defaultCreateRq.setEmail(email);
+            defaultCreateRq.setPassword("password");
             defaultCreateRq.setIsActive(true);
             profileService.defaultRegistration(defaultCreateRq);
         } else {

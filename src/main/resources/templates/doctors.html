@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{default}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Список врачей</title>
+    <style>
+        .profile-card {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 15px;
+            min-height: 200px;
+            max-height: 250px;
+            display: flex;
+            gap: 15px;
+        }
+
+        .profile-card img {
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+<div layout:fragment="content">
+    <h1>Список врачей</h1>
+
+    <form th:action="@{/doctors}" method="get" class="mb-4">
+        <div class="row">
+            <div class="col-md-3 mb-3">
+                <label for="doctorType" class="form-label">Тип врача:</label>
+                <select id="doctorType" name="doctorType" th:field="${searchProfileRq.doctorType}" class="form-select">
+                    <option value="" th:selected="${searchProfileRq.doctorType == null}">Все</option>
+                    <option value="THERAPIST" th:selected="${searchProfileRq.doctorType == 'THERAPIST'}">Терапевт
+                    </option>
+                    <option value="CARDIOLOGIST" th:selected="${searchProfileRq.doctorType == 'CARDIOLOGIST'}">
+                        Кардиолог
+                    </option>
+                    <option value="DENTIST" th:selected="${searchProfileRq.doctorType == 'DENTIST'}">Стоматолог</option>
+                    <option value="PEDIATRICIAN" th:selected="${searchProfileRq.doctorType == 'PEDIATRICIAN'}">Педиатр
+                    </option>
+                    <option value="SURGEON" th:selected="${searchProfileRq.doctorType == 'SURGEON'}">Хирург</option>
+                    <option value="NEUROLOGIST" th:selected="${searchProfileRq.doctorType == 'NEUROLOGIST'}">Невролог
+                    </option>
+                </select>
+            </div>
+            <div class="col-md-3 mb-3">
+                <label for="fullName" class="form-label">ФИО:</label>
+                <input type="text" id="fullName" name="fullName" th:field="${searchProfileRq.fullName}"
+                       placeholder="Введите ФИО" class="form-control">
+            </div>
+            <div class="col-md-2 mb-3">
+                <label for="page" class="form-label">Страница:</label>
+                <input type="number" id="page" name="page" th:field="${searchProfileRq.page}" min="0"
+                       class="form-control">
+            </div>
+            <div class="col-md-2 mb-3">
+                <label for="size" class="form-label">Размер страницы:</label>
+                <input type="number" id="size" name="size" th:field="${searchProfileRq.size}" min="1"
+                       class="form-control">
+            </div>
+            <div class="col-md-2 mb-3 d-flex align-items-end">
+                <button type="submit" class="btn btn-primary w-100">Применить фильтры</button>
+            </div>
+        </div>
+    </form>
+    <div th:if="${doctorProfiles != null}">
+        <div th:each="doctor : ${doctorProfiles.doctors}" class="profile-card">
+            <img th:src="${doctor.imageUrl}" alt="Фото врача" class="img-fluid">
+            <div>
+                <h3 th:text="${doctor.fullName}"></h3>
+                <p>Тип: <span th:text="${doctor.doctorType}"></span></p>
+                <button type="button" class="btn btn-success mt-2"
+                        data-bs-toggle="modal"
+                        data-bs-target="#addSessionModal"
+                        th:attr="data-doctor-id=${doctor.id}" th:if="${userRole == 'ADMINISTRATOR'}">
+                    Добавить сессию
+                </button>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                        data-bs-target="#doctorSessionsModal"
+                        th:attr="onclick=|javascript:addSession('${doctor.id}')|">
+                    Посмотреть сессии
+                </button>
+            </div>
+        </div>
+
+        <div class="pagination">
+            <a th:href="@{/doctors(page=${doctorProfiles.page - 1}, size=${doctorProfiles.size})}"
+               th:if="${doctorProfiles.page > 0}" class="btn btn-secondary">Назад</a>
+
+            <!-- Страница и общее количество -->
+            <span class="mx-3"
+                  th:text="'Страница ' + (${doctorProfiles.page + 1}) + ' из ' + ${(doctorProfiles.totalCount + doctorProfiles.size -1) / doctorProfiles.size}"></span>
+            <a th:href="@{/doctors(page=${doctorProfiles.page + 1}, size=${doctorProfiles.size})}"
+               th:if="${(doctorProfiles.page + 1) * doctorProfiles.size < doctorProfiles.totalCount}"
+               class="btn btn-secondary">Вперёд</a>
+        </div>
+    </div>
+
+    <div class="modal fade" id="addSessionModal" tabindex="-1" aria-labelledby="addSessionModalLabel"
+         aria-hidden="true" th:if="${userRole == 'ADMINISTRATOR'}">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addSessionModalLabel">Добавить сессию</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Скрытое поле для doctorId -->
+                    <input type="hidden" id="doctorIdInput" name="doctorId">
+                    <div class="mb-3">
+                        <label for="sessionStart" class="form-label">Дата и время начала:</label>
+                        <input type="datetime-local" id="sessionStart" name="sessionStart" class="form-control"
+                               required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="duration" class="form-label">Длительность (минуты):</label>
+                        <input type="number" id="duration" name="duration" class="form-control" min="1" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="price" class="form-label">Цена (руб.):</label>
+                        <input type="number" step="0.01" id="price" name="price" class="form-control" min="0.01"
+                               required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                    <button type="button" class="btn btn-primary" th:attr="onclick=|javascript:createSession()|">
+                        Добавить
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="doctorSessionsModal" tabindex="-1" aria-labelledby="doctorSessionsModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="doctorSessionsModalLabel">Сессии доктора</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Список сессий -->
+                    <div class="mb-3">
+                        <label for="medicalSessionId" class="form-label">Сессии</label>
+                        <select class="form-select" id="medicalSessionId">
+                        </select>
+                    </div>
+
+                    <div th:if="${userRole == 'ADMINISTRATOR'}" class="mb-3">
+                        <label for="patientId" class="form-label">Пользователь</label>
+                        <select class="form-select" id="patientId">
+                            <option th:each="patient : ${patients}"
+                                    th:value="${patient.id}"
+                                    th:text="${patient.fullName}">
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                    <button type="button" class="btn btn-primary" th:if="${userRole != 'DOCTOR'}" th:attr="onclick=|javascript:addPatient()|">Сохранить
+                        изменения
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block layout:fragment="scripts">
+    <script>
+        let sessionStart = $('#sessionStart');
+        let duration = $('#duration');
+        let price = $('#price');
+        let doctorId = $('#doctorIdInput');
+
+        const modal = document.getElementById('addSessionModal');
+        modal.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget; // Кнопка, которая вызвала модальное окно
+            const doctorId = button.getAttribute('data-doctor-id'); // Получение id врача
+            const input = document.getElementById('doctorIdInput');
+            input.value = doctorId; // Установка id врача в скрытое поле
+        });
+
+        function createSession() {
+            $.ajax({
+                url: `/api/session/create`,
+                type: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-Token': csrfToken,
+                },
+                data: JSON.stringify({
+                    doctorId: doctorId.val(),
+                    sessionStart: new Date(sessionStart.val()).toISOString(),
+                    duration: duration.val(),
+                    price: price.val()
+                }),
+                success: function () {
+                    location.reload();
+                },
+            });
+        }
+
+        let patientId;
+
+        function addPatient() {
+            let medicalSessionId = $('#medicalSessionId');
+            let patientId = $('#patientId');
+            let cookiePatientId = $.cookie('patientId');
+            console.log(medicalSessionId);
+            console.log(medicalSessionId.val());
+            console.log(patientId);
+            console.log(patientId.val());
+            console.log(cookiePatientId);
+            $.ajax({
+                url: `/api/session/addPatient`,
+                type: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-Token': csrfToken,
+                },
+                data: JSON.stringify({
+                    medicalSessionId: medicalSessionId.val(),
+                    patientId: patientId.val() ? patientId.val() : cookiePatientId
+                }),
+                success: function () {
+                    location.reload();
+                },
+            });
+        }
+
+        function addSession(doctorId) {
+            let medicalSessionId = $('#medicalSessionId');
+            $.ajax({
+                url: `/api/session/${doctorId}`,
+                type: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-Token': csrfToken,
+                },
+                success: function (dates) {
+                    medicalSessionId.empty();
+                    dates?.forEach(session => {
+                        medicalSessionId.append($('<option>', {
+                            value: session.id,
+                            text: `${formatDateTime3(session.sessionStart)} - ${session.duration} минут ${session.price} руб.`
+                        }));
+                    });
+                    console.log('Полученные данные:', dates);
+                },
+            });
+        }
+
+        function formatDateTime3(dateTimeString) {
+            if (dateTimeString) {
+                let dateTime = new Date(dateTimeString);
+                let year = dateTime.getFullYear();
+                let month = ('0' + (dateTime.getMonth() + 1)).slice(-2); // Месяцы в JavaScript начинаются с 0, поэтому добавляем 1
+                let date = ('0' + dateTime.getDate()).slice(-2);
+                let hours = ('0' + dateTime.getHours()).slice(-2);
+                let minutes = ('0' + dateTime.getMinutes()).slice(-2);
+
+                return `${year}-${month}-${date} ${hours}:${minutes}`;
+            }
+            return ''
+        }
+    </script>
+</th:block>
+</body>
+</html>

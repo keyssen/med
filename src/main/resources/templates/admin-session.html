@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{default}">
+
+<head>
+</head>
+
+<body>
+<div layout:fragment="content">
+    <div class="container my-5">
+        <h1 class="text-center mb-4">Сессии</h1>
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            <div class="col" th:each="adminSession : ${adminSessions}">
+                <div class="card h-100">
+                    <img th:src="${adminSession.doctorImageUrl}"
+                         th:if="${adminSession.doctorImageUrl != null}"
+                         class="card-img-top"
+                         alt="Изображение врача">
+                    <img th:src="@{/avatar.jpg}"
+                         th:if="${adminSession.doctorImageUrl == null}"
+                         class="card-img-top"
+                         alt="Изображение врача">
+                    <div class="card-body">
+                        <p class="card-text">
+                            <strong>ФИО врача:</strong> <span
+                                th:text="${adminSession.doctorFullName}">ФИО врача:</span><br>
+                            <strong>ФИО пациента:</strong> <span
+                                th:text="${adminSession.patientFullName}">ФИО пациента:</span><br>
+                            <strong>Статус:</strong> <span th:text="${adminSession.sessionStatus}">Статус</span><br>
+                            <strong>Начало сессии:</strong> <span
+                                th:text="${#temporals.format(adminSession.sessionStart, 'yyyy-MM-dd HH:mm')}">Начало сессии:</span><br>
+                            <strong>Длительность:</strong> <span th:text="${adminSession.duration}">Длительность</span>
+                            минуты<br>
+                            <strong>Цена:</strong> <span th:text="${adminSession.price}">Цена</span>
+                        </p>
+                        <div>
+                            <button th:if="${adminSession.sessionStatus.name() == 'AWAITING_PAYMENT' && userRole == 'ADMINISTRATOR'}"
+                                    type="button"
+                                    class="btn btn-danger" th:attr="onclick=|javascript:changeStatus('PAID','${adminSession.id}')|">
+                                Оплачено
+                            </button>
+                            <button th:if="${adminSession.sessionStatus.name() == 'PATIENT_REGISTERED' && userRole == 'ADMINISTRATOR'}"
+                                    type="button"
+                                    class="btn btn-danger" th:attr="onclick=|javascript:changeStatus('DECLINED','${adminSession.id}')|">
+                                Отменить сессию
+                            </button>
+                            <button th:if="${adminSession.sessionStatus.name() == 'PATIENT_REGISTERED' && userRole == 'ADMINISTRATOR'}"
+                                    type="button"
+                                    class="btn btn-danger" th:attr="onclick=|javascript:changeStatus('IN_PROGRESS','${adminSession.id}')|">
+                                Начать сессию
+                            </button>
+                            <a th:href="@{/session/{sessionId}(sessionId=${adminSession.id})}"
+                               class="btn btn-info mt-3">
+                                Перейти к сессии
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<th:block layout:fragment="scripts">
+    <script>
+        function changeStatus(status, medicalSessionId) {
+            $.ajax({
+                url: `/api/session/status`,
+                type: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-Token': csrfToken,
+                },
+                data: JSON.stringify({
+                    id: medicalSessionId,
+                    status: status
+                }),
+                success: function () {
+                    location.reload();
+                },
+            });
+        }
+    </script>
+</th:block>
+</body>
+</html>

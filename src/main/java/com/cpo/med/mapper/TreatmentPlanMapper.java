@@ -15,11 +15,12 @@ public class TreatmentPlanMapper {
         );
     }
 
-    public static TreatmentPlanEntity toEntity(TreatmentPlanCreateRq createRq, MedicalSessionEntity medicalSession) {
+    public static TreatmentPlanEntity toEntity(TreatmentPlanUpdateRq updateRq, MedicalSessionEntity medicalSession) {
         TreatmentPlanEntity treatmentPlan = new TreatmentPlanEntity();
-        treatmentPlan.setDiagnosis(createRq.getDiagnosis());
-        treatmentPlan.setTherapyPlan(createRq.getTherapyPlan());
+        treatmentPlan.setDiagnosis(updateRq.getDiagnosis());
+        treatmentPlan.setTherapyPlan(updateRq.getTherapyPlan());
         treatmentPlan.setMedicalSessionEntity(medicalSession);
+        medicalSession.setTreatmentPlan(treatmentPlan);
         return treatmentPlan;
     }
 
