@@ -33,12 +33,12 @@
                         <div>
                             <button th:if="${doctorSession.sessionStatus.name() == 'IN_PROGRESS' && userRole == 'DOCTOR'}"
                                     type="button"
-                                    class="btn btn-danger" th:attr="onclick=|javascript:changeStatus('AWAITING_PAYMENT','${doctorSession.id}')|">
+                                    class="btn btn-danger mt-3" th:attr="onclick=|javascript:changeStatus('AWAITING_PAYMENT','${doctorSession.id}')|">
                                 Закончить сессию
                             </button>
                             <button th:if="${doctorSession.sessionStatus.name() == 'PATIENT_REGISTERED' && userRole == 'DOCTOR'}"
                                     type="button"
-                                    class="btn btn-danger" th:attr="onclick=|javascript:changeStatus('DECLINED','${doctorSession.id}')|">
+                                    class="btn btn-danger mt-3" th:attr="onclick=|javascript:changeStatus('DECLINED','${doctorSession.id}')|">
                                 Отменить сессию
                             </button>
                             <a th:href="@{/session/{sessionId}(sessionId=${doctorSession.id})}"

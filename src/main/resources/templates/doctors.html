@@ -87,7 +87,7 @@
                         th:attr="data-doctor-id=${doctor.id}" th:if="${userRole == 'ADMINISTRATOR'}">
                     Добавить сессию
                 </button>
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                <button type="button" class="btn btn-primary mt-2" data-bs-toggle="modal"
                         data-bs-target="#doctorSessionsModal"
                         th:attr="onclick=|javascript:addSession('${doctor.id}')|">
                     Посмотреть сессии

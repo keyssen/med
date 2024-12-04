@@ -35,17 +35,17 @@
                         <div>
                             <button th:if="${adminSession.sessionStatus.name() == 'AWAITING_PAYMENT' && userRole == 'ADMINISTRATOR'}"
                                     type="button"
-                                    class="btn btn-danger" th:attr="onclick=|javascript:changeStatus('PAID','${adminSession.id}')|">
+                                    class="btn btn-danger mt-3" th:attr="onclick=|javascript:changeStatus('PAID','${adminSession.id}')|">
                                 Оплачено
                             </button>
                             <button th:if="${adminSession.sessionStatus.name() == 'PATIENT_REGISTERED' && userRole == 'ADMINISTRATOR'}"
                                     type="button"
-                                    class="btn btn-danger" th:attr="onclick=|javascript:changeStatus('DECLINED','${adminSession.id}')|">
+                                    class="btn btn-danger mt-3" th:attr="onclick=|javascript:changeStatus('DECLINED','${adminSession.id}')|">
                                 Отменить сессию
                             </button>
                             <button th:if="${adminSession.sessionStatus.name() == 'PATIENT_REGISTERED' && userRole == 'ADMINISTRATOR'}"
                                     type="button"
-                                    class="btn btn-danger" th:attr="onclick=|javascript:changeStatus('IN_PROGRESS','${adminSession.id}')|">
+                                    class="btn btn-danger mt-3" th:attr="onclick=|javascript:changeStatus('IN_PROGRESS','${adminSession.id}')|">
                                 Начать сессию
                             </button>
                             <a th:href="@{/session/{sessionId}(sessionId=${adminSession.id})}"

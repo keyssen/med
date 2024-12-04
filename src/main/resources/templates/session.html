@@ -67,22 +67,22 @@
 
                 <button th:if="${medicalSession.sessionStatus.name() == 'IN_PROGRESS' && userRole == 'DOCTOR'}"
                         type="button"
-                        class="btn btn-danger" th:attr="onclick=|javascript:changeStatus('AWAITING_PAYMENT')|">
+                        class="btn btn-danger mt-3" th:attr="onclick=|javascript:changeStatus('AWAITING_PAYMENT')|">
                     Закончить сессию
                 </button>
                 <button th:if="${medicalSession.sessionStatus.name() == 'AWAITING_PAYMENT' && userRole == 'ADMINISTRATOR'}"
                         type="button"
-                        class="btn btn-danger" th:attr="onclick=|javascript:changeStatus('PAID')|">
+                        class="btn btn-danger mt-3" th:attr="onclick=|javascript:changeStatus('PAID')|">
                     Оплачено
                 </button>
-                <button th:if="${medicalSession.sessionStatus.name() == 'PATIENT_REGISTERED' && (userRole == 'DOCTOR' || 'ADMINISTRATOR')}"
+                <button th:if="${medicalSession.sessionStatus.name() == 'PATIENT_REGISTERED' && (userRole == 'DOCTOR' || userRole == 'ADMINISTRATOR')}"
                         type="button"
-                        class="btn btn-danger" th:attr="onclick=|javascript:changeStatus('DECLINED')|">
+                        class="btn btn-danger mt-3" th:attr="onclick=|javascript:changeStatus('DECLINED')|">
                     Отменить сессию
                 </button>
                 <button th:if="${medicalSession.sessionStatus.name() == 'PATIENT_REGISTERED' && userRole == 'PATIENT'}"
                         type="button"
-                        class="btn btn-danger" th:attr="onclick=|javascript:changeStatus('PATIENT_DECLINED')|">
+                        class="btn btn-danger mt-3" th:attr="onclick=|javascript:changeStatus('PATIENT_DECLINED')|">
                     Отменить сессию
                 </button>
             </div>

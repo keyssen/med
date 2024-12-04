@@ -36,7 +36,7 @@ public class MedicalSessionService {
 
     @Transactional(readOnly = true)
     public List<MedicalSessionAvailableRs> getAvailableRsByDoctorId(UUID doctorId) {
-        return MedicalSessionMapper.entityListToAvailableRsList(medicalSessionRepository.findByDoctorId(doctorId));
+        return MedicalSessionMapper.entityListToAvailableRsList(medicalSessionRepository.findByDoctorIds(List.of(doctorId), List.of(SessionStatus.CREATED, SessionStatus.DECLINED, SessionStatus.PATIENT_DECLINED)));
     }
 
     @Transactional(readOnly = true)

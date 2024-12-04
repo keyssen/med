@@ -33,6 +33,7 @@ public class ProfileMapper {
         ProfileEntity profileEntity = new ProfileEntity();
         profileEntity.setPassword(passwordEncoder.encode(profileDefaultCreateRq.getPassword()));
         profileEntity.setEmail(profileDefaultCreateRq.getEmail());
+        profileEntity.setName(profileDefaultCreateRq.getEmail());
         profileEntity.setIsActive(profileDefaultCreateRq.getIsActive());
         profileEntity.setProfileRole(ProfileRole.PATIENT);
         return profileEntity;

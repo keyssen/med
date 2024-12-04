@@ -33,7 +33,7 @@
                         <div>
                             <button th:if="${patientSession.sessionStatus.name() == 'PATIENT_REGISTERED' && userRole == 'PATIENT'}"
                                     type="button"
-                                    class="btn btn-danger" th:attr="onclick=|javascript:changeStatus('PATIENT_DECLINED','${patientSession.id}')|">
+                                    class="btn btn-danger mt-3" th:attr="onclick=|javascript:changeStatus('PATIENT_DECLINED','${patientSession.id}')|">
                                 Отменить сессию
                             </button>
                             <a th:href="@{/session/{sessionId}(sessionId=${patientSession.id})}"
