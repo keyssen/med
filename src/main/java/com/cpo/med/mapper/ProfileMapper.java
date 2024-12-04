@@ -5,9 +5,7 @@ import com.cpo.med.model.request.ProfileSignUpRq;
 import com.cpo.med.model.request.ProfileUpdateRq;
 import com.cpo.med.model.response.DoctorProfileRs;
 import com.cpo.med.model.response.PaginationDoctorProfileRs;
-import com.cpo.med.model.response.ProfileRs;
 import com.cpo.med.model.response.ProfileSimpleRs;
-import com.cpo.med.model.response.ProfileWithMedicalSessionRs;
 import com.cpo.med.persistence.entity.ProfileEntity;
 import com.cpo.med.persistence.entity.enums.ProfileRole;
 import com.cpo.med.service.MinioService;
@@ -20,7 +18,6 @@ import org.springframework.util.StringUtils;
 
 import java.util.List;
 
-import static com.cpo.med.utils.Constants.FILE_KEY_FORMAT;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
@@ -61,33 +58,6 @@ public class ProfileMapper {
             profileEntity.setPassword(passwordEncoder.encode(updateRq.getPassword()));
         }
         return profileEntity;
-    }
-
-    public static ProfileWithMedicalSessionRs entityToWithMedicalSessionRs(ProfileEntity profileEntity) {
-        ProfileWithMedicalSessionRs profileWithMedicalSessionRs = new ProfileWithMedicalSessionRs();
-        profileWithMedicalSessionRs.setDoctorType(profileEntity.getDoctorType());
-        profileWithMedicalSessionRs.setSurname(profileEntity.getSurname());
-        profileWithMedicalSessionRs.setName(profileEntity.getName());
-        profileWithMedicalSessionRs.setPatronymic(profileEntity.getPatronymic());
-        profileWithMedicalSessionRs.setImageUrl(String.format(FILE_KEY_FORMAT, profileEntity.getId(), profileEntity.getImage().getId()));
-        if (profileEntity.getProfileRole().equals(ProfileRole.DOCTOR)) {
-            profileWithMedicalSessionRs.setSessions(MedicalSessionMapper.entityListToRsList(profileEntity.getDoctorSessions()));
-        }
-        if (profileEntity.getProfileRole().equals(ProfileRole.PATIENT)) {
-            profileWithMedicalSessionRs.setSessions(MedicalSessionMapper.entityListToRsList(profileEntity.getPatientSessions()));
-        }
-        return profileWithMedicalSessionRs;
-    }
-
-    public static ProfileRs entityToRs(ProfileEntity profileEntity) {
-        ProfileRs profileRs = new ProfileRs();
-        profileRs.setId(profileEntity.getId());
-        profileRs.setSurname(profileEntity.getSurname());
-        profileRs.setName(profileEntity.getName());
-        profileRs.setPatronymic(profileEntity.getPatronymic());
-        profileRs.setImageUrl(String.format(FILE_KEY_FORMAT, profileEntity.getId(), profileEntity.getImage().getId()));
-        profileRs.setDoctorType(profileEntity.getDoctorType());
-        return profileRs;
     }
 
     public static ProfileUpdateRq entityToProfileUpdateRq(ProfileEntity profileEntity) {

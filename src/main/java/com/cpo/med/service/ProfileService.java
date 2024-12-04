@@ -1,15 +1,12 @@
 package com.cpo.med.service;
 
-import com.cpo.med.configuration.properties.MinioProperties;
 import com.cpo.med.mapper.ProfileMapper;
 import com.cpo.med.model.request.ProfileDefaultCreateRq;
 import com.cpo.med.model.request.ProfileSignUpRq;
 import com.cpo.med.model.request.ProfileUpdateRq;
 import com.cpo.med.model.request.SearchProfileRq;
 import com.cpo.med.model.response.PaginationDoctorProfileRs;
-import com.cpo.med.model.response.ProfileRs;
 import com.cpo.med.model.response.ProfileSimpleRs;
-import com.cpo.med.model.response.ProfileWithMedicalSessionRs;
 import com.cpo.med.persistence.entity.ImageEntity;
 import com.cpo.med.persistence.entity.ProfileEntity;
 import com.cpo.med.persistence.entity.enums.ProfileRole;
@@ -89,25 +86,8 @@ public class ProfileService extends DefaultOAuth2UserService implements UserDeta
     }
 
     @Transactional(readOnly = true)
-    public ProfileWithMedicalSessionRs getWithMedicalSessionRsById(UUID profileId) {
-        ProfileEntity profileEntity = getById(profileId);
-        return ProfileMapper.entityToWithMedicalSessionRs(profileEntity);
-    }
-
-    @Transactional(readOnly = true)
-    public ProfileRs getWithRsById(UUID profileId) {
-        ProfileEntity profileEntity = getById(profileId);
-        return ProfileMapper.entityToRs(profileEntity);
-    }
-
-    @Transactional(readOnly = true)
     public PaginationDoctorProfileRs getDoctorProfiles(SearchProfileRq searchProfileRq) {
         Page<ProfileEntity> doctors = profileCustomRepository.doctorFindProfile(searchProfileRq);
-        return profileMapper.pageDoctorsToPaginationRs(doctors);
-    }
-
-    public PaginationDoctorProfileRs getProfiles(SearchProfileRq searchProfileRq) {
-        Page<ProfileEntity> doctors = profileCustomRepository.adminFindProfile(searchProfileRq);
         return profileMapper.pageDoctorsToPaginationRs(doctors);
     }
 
@@ -142,21 +122,10 @@ public class ProfileService extends DefaultOAuth2UserService implements UserDeta
     public UUID update(UUID profileId, ProfileUpdateRq profileUpdateRq) {
         ProfileEntity profileEntity = getById(profileId);
         ProfileMapper.updateProfile(profileUpdateRq, profileEntity);
-        updateImage(profileId, profileUpdateRq.getPhoto());
+        if (nonNull(profileUpdateRq.getPhoto())){
+            updateImage(profileId, profileUpdateRq.getPhoto());
+        }
         return profileRepository.save(profileEntity).getId();
-    }
-
-    @Transactional
-    public UUID changeOtp(UUID profileId, Integer otp) {
-        ProfileEntity profileEntity = getById(profileId);
-        profileEntity.setOtp(otp);
-        return profileRepository.save(profileEntity).getId();
-    }
-
-    @Transactional(readOnly = true)
-    public Boolean verificationOtp(UUID profileId, Integer otp) {
-        ProfileEntity profileEntity = getById(profileId);
-        return profileEntity.getOtp().equals(otp);
     }
 
     @Transactional
@@ -169,23 +138,15 @@ public class ProfileService extends DefaultOAuth2UserService implements UserDeta
     }
 
     @Transactional
-    public void deleteImage(UUID profileId) {
-        ProfileEntity profileEntity = getById(profileId);
-        minioService.deleteFile(profileEntity.getId(), profileEntity.getImage().getId());
-    }
-
-    @Transactional
     public void updateImage(UUID profileId, MultipartFile file) {
         ProfileEntity profileEntity = getById(profileId);
+        if (file.isEmpty()) {
+            throw new RuntimeException("Please select a file to upload.");
+        }
         if (nonNull(profileEntity.getImage())) {
             minioService.deleteFile(profileEntity.getId(), profileEntity.getImage().getId());
         }
         addImage(profileEntity.getId(), file);
-    }
-
-    @Transactional
-    public void delete(UUID profileId) {
-        profileRepository.deleteById(profileId);
     }
 
     @Override

@@ -41,7 +41,6 @@ public class SignInController {
     public String otpVerification(@RequestParam Integer otpValue,
                                   HttpServletRequest request, HttpServletResponse response) {
         SecurityContext securityContext = SecurityContextHolder.getContext();
-        Authentication authentication = securityContext.getAuthentication();
         UserDetails user = (UserDetails) securityContext.getAuthentication().getPrincipal();
         ProfileEntity users = profileService.findByEmail(user.getUsername());
         if (Objects.equals(users.getOtp(), otpValue)) {

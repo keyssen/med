@@ -16,3 +16,26 @@ spring:
   liquibase:
     change-log: classpath:/db/changelog/changelog.xml
     enabled: true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: orderbuyerzxc@gmail.com
+    password: bhau wuvy rltg psgv
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: true
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 828349669244-uefk20ipds1eg22ks0n4m9aqj4hhrqcn.apps.googleusercontent.com
+            client-secret: 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
+
+minio:
+  endpoint: http://127.0.0.1:9000
+  accessKey:  minioadmin
+  secretKey:  minioadmin
+  bucket-name: commons

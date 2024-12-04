@@ -21,16 +21,6 @@ public class TreatmentPlanService {
     private final MedicalSessionService medicalSessionService;
     private final TreatmentPlanRepository treatmentPlanRepository;
 
-    private TreatmentPlanEntity getById(UUID treatmentPlanId) {
-        return treatmentPlanRepository.findById(treatmentPlanId)
-                .orElseThrow(RuntimeException::new);
-    }
-
-    @Transactional
-    public TreatmentPlanRs getRsById(UUID treatmentPlanId) {
-        return TreatmentPlanMapper.toResponse(getById(treatmentPlanId));
-    }
-
     @Transactional
     public UUID create(TreatmentPlanUpdateRq createRq, MedicalSessionEntity medicalSession) {
         if (medicalSession.getSessionStatus().equals(IN_PROGRESS)) {

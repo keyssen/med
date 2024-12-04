@@ -60,19 +60,9 @@ public class MedicalSessionService {
         return medicalSessionMapper.entityToRs(medicalSession);
     }
 
-    @Transactional(readOnly = true)
-    public List<MedicalSessionAvailableRs> getByPatientId(UUID doctorId) {
-        return MedicalSessionMapper.entityListToAvailableRsList(medicalSessionRepository.findByPatientId(doctorId));
-    }
-
     @Transactional
     public UUID create(MedicalSessionCreateRq medicalSessionCreateRq) {
         return medicalSessionRepository.save(MedicalSessionMapper.medicalSessionCreateRqToMedicalSession(medicalSessionCreateRq, profileService.getById(medicalSessionCreateRq.getDoctorId()))).getId();
-    }
-
-    @Transactional
-    public UUID update(MedicalSessionUpdateRq medicalSessionUpdateRq, UUID medicalSessionId) {
-        return medicalSessionRepository.save(MedicalSessionMapper.medicalSessionUpdateRqToMedicalSession(medicalSessionUpdateRq, getById(medicalSessionId))).getId();
     }
 
     @Transactional
@@ -90,10 +80,5 @@ public class MedicalSessionService {
             throw new RuntimeException();
         }
         sessionStatusTransitionStrategy.statusTransition(status, medicalSession);
-    }
-
-    @Transactional
-    public void delete(UUID medicalSessionId) {
-        medicalSessionRepository.deleteById(medicalSessionId);
     }
 }

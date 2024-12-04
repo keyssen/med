@@ -22,6 +22,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.FieldNameConstants;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -73,12 +74,12 @@ public class ProfileEntity {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "doctor", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
-    private List<MedicalSessionEntity> doctorSessions;
+    private List<MedicalSessionEntity> doctorSessions = new ArrayList<>();
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "patient", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
-    private List<MedicalSessionEntity> patientSessions;
+    private List<MedicalSessionEntity> patientSessions = new ArrayList<>();
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude

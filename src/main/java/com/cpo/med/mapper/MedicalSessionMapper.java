@@ -58,35 +58,6 @@ public class MedicalSessionMapper {
         return medicalSessionAvailableRs;
     }
 
-    public static List<MedicalSessionProfileRs> entityListToRsList(List<MedicalSessionEntity> medicalSessionEntities) {
-        return medicalSessionEntities.stream().map(MedicalSessionMapper::entityToProfileRs).toList();
-    }
-
-    public static MedicalSessionProfileRs entityToProfileRs(MedicalSessionEntity medicalSessionEntity) {
-        MedicalSessionProfileRs medicalSessionProfileRs = new MedicalSessionProfileRs();
-        medicalSessionProfileRs.setId(medicalSessionEntity.getId());
-        medicalSessionProfileRs.setSurname(medicalSessionEntity.getDoctor().getSurname());
-        medicalSessionProfileRs.setName(medicalSessionEntity.getDoctor().getName());
-        medicalSessionProfileRs.setPatronymic(medicalSessionEntity.getDoctor().getPatronymic());
-        medicalSessionProfileRs.setDoctorType(medicalSessionEntity.getDoctor().getDoctorType());
-        medicalSessionProfileRs.setSessionStart(medicalSessionEntity.getSessionStart());
-        medicalSessionProfileRs.setDuration(medicalSessionEntity.getDuration());
-        medicalSessionProfileRs.setPrice(medicalSessionEntity.getPrice());
-        return medicalSessionProfileRs;
-    }
-
-    public static List<SessionSimpleRs> entitiesToListSimpleRs(List<MedicalSessionEntity> medicalSessionEntityList) {
-        return medicalSessionEntityList.stream().map(MedicalSessionMapper::entityToSimpleRs).toList();
-    }
-
-    public static SessionSimpleRs entityToSimpleRs(MedicalSessionEntity medicalSessionEntity) {
-        SessionSimpleRs sessionSimpleRs = new SessionSimpleRs();
-        sessionSimpleRs.setId(medicalSessionEntity.getId());
-        sessionSimpleRs.setSessionStart(medicalSessionEntity.getSessionStart());
-
-        return sessionSimpleRs;
-    }
-
     public List<MedicalSessionRs> entitiesToListRs(List<MedicalSessionEntity> medicalSessionEntityList) {
         return medicalSessionEntityList.stream().map(this::entityToRs).toList();
     }
