@@ -1,7 +1,7 @@
 package com.cpo.med;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
@@ -12,15 +12,16 @@ import org.testcontainers.utility.DockerImageName;
 @SpringBootTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Testcontainers
-public abstract class AbstractDataJpaTest {
-    private static final PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>(
+public interface AbstractDataJpaTest {
+    PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>(
             DockerImageName.parse("postgres:16-alpine")
     )
             .withDatabaseName("postgres")
             .withUsername("postgres")
             .withPassword("example");
 
-    static {
+    @BeforeAll
+    static void init() {
         postgreSQLContainer.start();
     }
 

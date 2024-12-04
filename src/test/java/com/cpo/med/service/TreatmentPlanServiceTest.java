@@ -1,6 +1,7 @@
 package com.cpo.med.service;
 
 import com.cpo.med.AbstractDataJpaTest;
+import com.cpo.med.AbstractMinioClientTest;
 import com.cpo.med.DataJPACreator;
 import com.cpo.med.persistence.entity.MedicalSessionEntity;
 import com.cpo.med.persistence.entity.ProfileEntity;
@@ -17,7 +18,7 @@ import java.util.UUID;
 import static com.cpo.med.DataCreator.createTreatmentPlanUpdateRq;
 
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
-public class TreatmentPlanServiceTest extends AbstractDataJpaTest {
+public class TreatmentPlanServiceTest implements AbstractDataJpaTest, AbstractMinioClientTest {
     private static MedicalSessionEntity medicalSessionEntity;
     private static ProfileEntity profileEntityDoctor;
     private static ProfileEntity profileEntityPatient;

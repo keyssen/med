@@ -1,6 +1,7 @@
 package com.cpo.med.service;
 
 import com.cpo.med.AbstractDataJpaTest;
+import com.cpo.med.AbstractMinioClientTest;
 import com.cpo.med.DataJPACreator;
 import com.cpo.med.model.request.ProfileUpdateRq;
 import com.cpo.med.model.response.PaginationDoctorProfileRs;
@@ -27,7 +28,7 @@ import static com.cpo.med.DataCreator.createProfileUpdateRq;
 import static com.cpo.med.DataCreator.createSearchProfileRq;
 
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
-public class ProfileServiceTest extends AbstractDataJpaTest {
+public class ProfileServiceTest implements AbstractDataJpaTest, AbstractMinioClientTest {
     private static ProfileEntity profileEntityDoctor;
     private final ProfileService underTest;
     private final ProfileRepository profileRepository;

@@ -1,6 +1,7 @@
 package com.cpo.med.service;
 
 import com.cpo.med.AbstractDataJpaTest;
+import com.cpo.med.AbstractMinioClientTest;
 import com.cpo.med.DataJPACreator;
 import com.cpo.med.model.request.MedicalSessionCreateRq;
 import com.cpo.med.model.response.MedicalSessionRs;
@@ -22,7 +23,7 @@ import static com.cpo.med.DataCreator.createMedicalSession;
 import static com.cpo.med.DataCreator.createMedicalSessionCreateRq;
 
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
-public class MedicalSessionServiceTest extends AbstractDataJpaTest {
+public class MedicalSessionServiceTest implements AbstractDataJpaTest, AbstractMinioClientTest {
     private static MedicalSessionEntity medicalSessionEntity;
     private static ProfileEntity profileEntityDoctor;
     private final MedicalSessionRepository medicalSessionRepository;

@@ -1,6 +1,7 @@
 package com.cpo.med.service;
 
 import com.cpo.med.AbstractDataJpaTest;
+import com.cpo.med.AbstractMinioClientTest;
 import com.cpo.med.DataJPACreator;
 import com.cpo.med.persistence.entity.ImageEntity;
 import com.cpo.med.persistence.entity.ProfileEntity;
@@ -13,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
-public class ImageServiceTest extends AbstractDataJpaTest {
+public class ImageServiceTest implements AbstractDataJpaTest, AbstractMinioClientTest {
     private final ImageService underTest;
     private final ProfileRepository profileRepository;
     private final DataJPACreator dataJPACreator;
